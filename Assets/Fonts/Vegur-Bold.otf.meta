@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: e2b654f1f2afc0645b0c0ea3e55495b6
+timeCreated: 1525622301
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Vegur
+  fontNames:
+  - Vegur
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 92b7737a5e7144d46b7a1ed1ff31e133, type: 3}
+  - {fileID: 12800000, guid: 79ce6aaeb15696e4b9bfc44f8c73d118, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
