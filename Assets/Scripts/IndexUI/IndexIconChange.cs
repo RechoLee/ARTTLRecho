@@ -19,6 +19,7 @@ public class IndexIconChange : MonoBehaviour
     ///标题数组
     private string[] titles;
     private Text currText;
+    private GameObject loginPanel;
 
     public Color originColor;
     public Color selectedColor;
@@ -32,6 +33,7 @@ public class IndexIconChange : MonoBehaviour
         btnItems[1] = GameObject.Find("Canvas/BG/Bottom-BG/Bottom-Item2").GetComponent<Button>();
         btnItems[2] = GameObject.Find("Canvas/BG/Bottom-BG/Bottom-Item3").GetComponent<Button>();
         currText = GameObject.Find("Canvas/BG/Top-BG/Item-Title").GetComponent<Text>();
+        loginPanel = GameObject.Find("Canvas/BG/Center/Login");
     }
 
     private void Start()
@@ -78,6 +80,7 @@ public class IndexIconChange : MonoBehaviour
             }
             isSelected[i]= false;
         }
+        loginPanel.SetActive(false);
         currText.text= titles[0];
         isSelected[0] = true;
         btnItems[0].GetComponent<Image>().color = selectedColor;
@@ -93,6 +96,7 @@ public class IndexIconChange : MonoBehaviour
             }
             isSelected[i] = false;
         }
+        loginPanel.SetActive(false);
         currText.text = titles[1];
         isSelected[1] = true;
         btnItems[1].GetComponent<Image>().color = selectedColor;
@@ -108,6 +112,7 @@ public class IndexIconChange : MonoBehaviour
             }
             isSelected[i] = false;
         }
+        loginPanel.SetActive(true);
         currText.text = titles[2];
         isSelected[2] = true;
         btnItems[2].GetComponent<Image>().color = selectedColor;
