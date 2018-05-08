@@ -13,13 +13,19 @@ public class IndexIconChange : MonoBehaviour
     /// 首页界面上的三个按键
     /// </summary>
     private Button[] btnItems=new Button[3];
+
+    private Button alreadyRegisBtn;
+    private Button CreateNewBtn;
+
     [HideInInspector]
     //是否选中
     private bool[] isSelected;
     ///标题数组
     private string[] titles;
     private Text currText;
+    private GameObject indexPanel;
     private GameObject loginPanel;
+    private GameObject regisPanel;
 
     public Color originColor;
     public Color selectedColor;
@@ -34,6 +40,10 @@ public class IndexIconChange : MonoBehaviour
         btnItems[2] = GameObject.Find("Canvas/BG/Bottom-BG/Bottom-Item3").GetComponent<Button>();
         currText = GameObject.Find("Canvas/BG/Top-BG/Item-Title").GetComponent<Text>();
         loginPanel = GameObject.Find("Canvas/BG/Center/Login");
+        indexPanel = GameObject.Find("Canvas/BG/Center/IndexPanel");
+        regisPanel = GameObject.Find("Canvas/BG/Center/SignUp");
+        alreadyRegisBtn = GameObject.Find("Canvas/BG/Center/SignUp/AlreadyRegisBtn").GetComponent<Button>();
+        CreateNewBtn = GameObject.Find("Canvas/BG/Center/Login/CreateNewBtn").GetComponent<Button>();
     }
 
     private void Start()
@@ -68,6 +78,21 @@ public class IndexIconChange : MonoBehaviour
             }
             btnItems[i].GetComponent<Image>().color = originColor;
         }
+
+        CreateNewBtn.onClick.AddListener(SwitchSignUp);
+        alreadyRegisBtn.onClick.AddListener(SwitchLogin);
+    }
+
+    private void SwitchLogin()
+    {
+        regisPanel.SetActive(false);
+        loginPanel.SetActive(true);
+    }
+
+    private void SwitchSignUp()
+    {
+        loginPanel.SetActive(false);
+        regisPanel.SetActive(true);
     }
 
     private void OnBtnItem0()
@@ -81,6 +106,8 @@ public class IndexIconChange : MonoBehaviour
             isSelected[i]= false;
         }
         loginPanel.SetActive(false);
+        regisPanel.SetActive(false);
+        indexPanel.SetActive(true);
         currText.text= titles[0];
         isSelected[0] = true;
         btnItems[0].GetComponent<Image>().color = selectedColor;
@@ -97,6 +124,8 @@ public class IndexIconChange : MonoBehaviour
             isSelected[i] = false;
         }
         loginPanel.SetActive(false);
+        indexPanel.SetActive(false);
+        regisPanel.SetActive(false);
         currText.text = titles[1];
         isSelected[1] = true;
         btnItems[1].GetComponent<Image>().color = selectedColor;
@@ -113,6 +142,7 @@ public class IndexIconChange : MonoBehaviour
             isSelected[i] = false;
         }
         loginPanel.SetActive(true);
+        indexPanel.SetActive(false);
         currText.text = titles[2];
         isSelected[2] = true;
         btnItems[2].GetComponent<Image>().color = selectedColor;
