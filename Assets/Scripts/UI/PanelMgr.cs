@@ -9,6 +9,8 @@ public class PanelMgr : MonoBehaviour
     /// PanelMgr的单例
     /// </summary>
     public static PanelMgr instance;
+    public BasePanel currOpenedPanel;
+
     /// <summary>
     /// 场景中的canvas
     /// </summary>
@@ -35,7 +37,11 @@ public class PanelMgr : MonoBehaviour
         Init();
     }
 
-
+    private void Start()
+    {
+        //打开默认的首页界面
+        OpenPanel<IndexPanel>("IndexPanel");
+    }
 
     #endregion
 
@@ -69,6 +75,12 @@ public class PanelMgr : MonoBehaviour
     public void OpenPanel<T>(string path,params object[] args)
         where T:BasePanel
     {
+        //关闭上一个面板
+        if(currOpenedPanel!=null)
+        {
+            ClosePanel(currOpenedPanel.GetType().Name);
+        }
+
         //判读是否已经打开
         string panelName = typeof(T).ToString();
         if (panelDict.ContainsKey(panelName))
@@ -90,8 +102,7 @@ public class PanelMgr : MonoBehaviour
                 Debug.LogError("panelObj is null");
                 return;
             }
-            basePanel.panelObj = Instantiate<GameObject>(panelObj);
-            basePanel.panelObj.transform.SetParent(layerDict[basePanel.layer]);
+            basePanel.panelObj = Instantiate(panelObj,layerDict[basePanel.layer]);
         }
         else
         {
@@ -103,6 +114,7 @@ public class PanelMgr : MonoBehaviour
         basePanel.OnShowing();
         basePanel.OnShowed();
 
+        currOpenedPanel = basePanel;
         panelDict.Add(panelName, basePanel);
     }
 

@@ -32,15 +32,16 @@ public class LoginPanel :BasePanel
     public override void Init(params object[] _args)
     {
         base.Init(_args);
-        this.panelPath = "LoginPanel";
+        this.panelPath = "Login";
         this.layer = PanelLayer.Panel;
     }
 
     public override void OnShowing()
     {
         base.OnShowing();
+
         Transform objTrans = this.panelObj.transform;
-        loginBtn= objTrans.Find("LoginBtn").GetComponent<Button>();
+        loginBtn = objTrans.Find("LoginBtn").GetComponent<Button>();
         forgotPWBtn = objTrans.Find("ForgotPWBtn").GetComponent<Button>();
         createNewBtn = objTrans.Find("CreateNewBtn").GetComponent<Button>();
         userNameIF = objTrans.Find("FieldUsername/InputField").GetComponent<InputField>();
@@ -81,7 +82,6 @@ public class LoginPanel :BasePanel
     private void OnCreateNewBtn()
     {
         PanelMgr.instance.OpenPanel<SignUpPanel>("");
-        PanelMgr.instance.ClosePanel(typeof(LoginPanel).ToString());
     }
 
     private void OnForgotPWBtn()

@@ -14,9 +14,6 @@ public class IndexIconChange : MonoBehaviour
     /// </summary>
     private Button[] btnItems=new Button[3];
 
-    private Button alreadyRegisBtn;
-    private Button CreateNewBtn;
-
     [HideInInspector]
     //是否选中
     private bool[] isSelected;
@@ -33,7 +30,7 @@ public class IndexIconChange : MonoBehaviour
     private void Awake()
     {
         isSelected = new bool[] { true, false, false };
-        titles = new string[] {"ARTTL","AR","Me"};
+        titles = new string[] {"Index","AR","Me"};
         //找到几个item button
         btnItems[0] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item1").GetComponent<Button>();
         btnItems[1] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item2").GetComponent<Button>();
@@ -42,8 +39,6 @@ public class IndexIconChange : MonoBehaviour
         loginPanel = GameObject.Find("Canvas/Panel/Login");
         indexPanel = GameObject.Find("Canvas/Panel/IndexPanel");
         regisPanel = GameObject.Find("Canvas/Panel/SignUp");
-        alreadyRegisBtn = GameObject.Find("Canvas/Panel/SignUp/AlreadyRegisBtn").GetComponent<Button>();
-        CreateNewBtn = GameObject.Find("Canvas/Panel/Login/CreateNewBtn").GetComponent<Button>();
     }
 
     private void Start()
@@ -78,21 +73,6 @@ public class IndexIconChange : MonoBehaviour
             }
             btnItems[i].GetComponent<Image>().color = originColor;
         }
-
-        CreateNewBtn.onClick.AddListener(SwitchSignUp);
-        alreadyRegisBtn.onClick.AddListener(SwitchLogin);
-    }
-
-    private void SwitchLogin()
-    {
-        regisPanel.SetActive(false);
-        loginPanel.SetActive(true);
-    }
-
-    private void SwitchSignUp()
-    {
-        loginPanel.SetActive(false);
-        regisPanel.SetActive(true);
     }
 
     private void OnBtnItem0()
@@ -105,9 +85,10 @@ public class IndexIconChange : MonoBehaviour
             }
             isSelected[i]= false;
         }
-        loginPanel.SetActive(false);
-        regisPanel.SetActive(false);
-        indexPanel.SetActive(true);
+
+        //调用PanelMgr OpenPanel
+        PanelMgr.instance.OpenPanel<IndexPanel>("");
+
         currText.text= titles[0];
         isSelected[0] = true;
         btnItems[0].GetComponent<Image>().color = selectedColor;
@@ -123,9 +104,14 @@ public class IndexIconChange : MonoBehaviour
             }
             isSelected[i] = false;
         }
-        loginPanel.SetActive(false);
-        indexPanel.SetActive(false);
-        regisPanel.SetActive(false);
+        //TODO:打开AR场景
+        if (PanelMgr.instance.currOpenedPanel != null)
+        {
+            PanelMgr.instance.ClosePanel(PanelMgr.instance.currOpenedPanel.GetType().Name);
+            PanelMgr.instance.currOpenedPanel = null;
+        }
+
+
         currText.text = titles[1];
         isSelected[1] = true;
         btnItems[1].GetComponent<Image>().color = selectedColor;
@@ -141,8 +127,10 @@ public class IndexIconChange : MonoBehaviour
             }
             isSelected[i] = false;
         }
-        loginPanel.SetActive(true);
-        indexPanel.SetActive(false);
+
+        //TODO:
+        PanelMgr.instance.OpenPanel<LoginPanel>("");
+
         currText.text = titles[2];
         isSelected[2] = true;
         btnItems[2].GetComponent<Image>().color = selectedColor;
