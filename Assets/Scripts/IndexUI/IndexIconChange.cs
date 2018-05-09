@@ -39,11 +39,11 @@ public class IndexIconChange : MonoBehaviour
         btnItems[1] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item2").GetComponent<Button>();
         btnItems[2] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item3").GetComponent<Button>();
         currText = GameObject.Find("Canvas/Top-BG/Item-Title").GetComponent<Text>();
-        loginPanel = GameObject.Find("Canvas/Center/Login");
-        indexPanel = GameObject.Find("Canvas/Center/IndexPanel");
-        regisPanel = GameObject.Find("Canvas/Center/SignUp");
-        alreadyRegisBtn = GameObject.Find("Canvas/Center/SignUp/AlreadyRegisBtn").GetComponent<Button>();
-        CreateNewBtn = GameObject.Find("Canvas/Center/Login/CreateNewBtn").GetComponent<Button>();
+        loginPanel = GameObject.Find("Canvas/Panel/Login");
+        indexPanel = GameObject.Find("Canvas/Panel/IndexPanel");
+        regisPanel = GameObject.Find("Canvas/Panel/SignUp");
+        alreadyRegisBtn = GameObject.Find("Canvas/Panel/SignUp/AlreadyRegisBtn").GetComponent<Button>();
+        CreateNewBtn = GameObject.Find("Canvas/Panel/Login/CreateNewBtn").GetComponent<Button>();
     }
 
     private void Start()

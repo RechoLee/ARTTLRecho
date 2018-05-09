@@ -1060,7 +1060,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1193508747945876, guid: cc22b784862b72546a63ddb8fef32fe0, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1250815094758586, guid: cc22b784862b72546a63ddb8fef32fe0, type: 2}
+      propertyPath: m_Name
+      value: ForgotPWBtn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cc22b784862b72546a63ddb8fef32fe0, type: 2}
@@ -1719,6 +1723,10 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 1735082157295198, guid: 9c191e9ad6934dd448173c8dc753a99b, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9c191e9ad6934dd448173c8dc753a99b, type: 2}
   m_IsPrefabParent: 0
@@ -1855,7 +1863,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f680108dbb09dae40869a5e463f58ca9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
