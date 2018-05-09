@@ -35,15 +35,15 @@ public class IndexIconChange : MonoBehaviour
         isSelected = new bool[] { true, false, false };
         titles = new string[] {"ARTTL","AR","Me"};
         //找到几个item button
-        btnItems[0] = GameObject.Find("Canvas/BG/Bottom-BG/Bottom-Item1").GetComponent<Button>();
-        btnItems[1] = GameObject.Find("Canvas/BG/Bottom-BG/Bottom-Item2").GetComponent<Button>();
-        btnItems[2] = GameObject.Find("Canvas/BG/Bottom-BG/Bottom-Item3").GetComponent<Button>();
-        currText = GameObject.Find("Canvas/BG/Top-BG/Item-Title").GetComponent<Text>();
-        loginPanel = GameObject.Find("Canvas/BG/Center/Login");
-        indexPanel = GameObject.Find("Canvas/BG/Center/IndexPanel");
-        regisPanel = GameObject.Find("Canvas/BG/Center/SignUp");
-        alreadyRegisBtn = GameObject.Find("Canvas/BG/Center/SignUp/AlreadyRegisBtn").GetComponent<Button>();
-        CreateNewBtn = GameObject.Find("Canvas/BG/Center/Login/CreateNewBtn").GetComponent<Button>();
+        btnItems[0] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item1").GetComponent<Button>();
+        btnItems[1] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item2").GetComponent<Button>();
+        btnItems[2] = GameObject.Find("Canvas/Bottom-BG/Bottom-Item3").GetComponent<Button>();
+        currText = GameObject.Find("Canvas/Top-BG/Item-Title").GetComponent<Text>();
+        loginPanel = GameObject.Find("Canvas/Center/Login");
+        indexPanel = GameObject.Find("Canvas/Center/IndexPanel");
+        regisPanel = GameObject.Find("Canvas/Center/SignUp");
+        alreadyRegisBtn = GameObject.Find("Canvas/Center/SignUp/AlreadyRegisBtn").GetComponent<Button>();
+        CreateNewBtn = GameObject.Find("Canvas/Center/Login/CreateNewBtn").GetComponent<Button>();
     }
 
     private void Start()
