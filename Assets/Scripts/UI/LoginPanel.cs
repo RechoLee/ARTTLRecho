@@ -40,16 +40,22 @@ public class LoginPanel :BasePanel
     {
         base.OnShowing();
 
-        Transform objTrans = this.panelObj.transform;
-        loginBtn = objTrans.Find("LoginBtn").GetComponent<Button>();
-        forgotPWBtn = objTrans.Find("ForgotPWBtn").GetComponent<Button>();
-        createNewBtn = objTrans.Find("CreateNewBtn").GetComponent<Button>();
-        userNameIF = objTrans.Find("FieldUsername/InputField").GetComponent<InputField>();
-        pwIF = objTrans.Find("FieldPassword/InputField").GetComponent<InputField>();
+        ///双重验证 ui控件未初始化 这里只初始化一次 如果频繁Find会使GC暴涨 主要是之前的
+        ///赋值操作的变量会被GC回收
 
-        loginBtn.onClick.AddListener(OnLoginBtn);
-        forgotPWBtn.onClick.AddListener(OnForgotPWBtn);
-        createNewBtn.onClick.AddListener(OnCreateNewBtn);
+        if (loginBtn == null && forgotPWBtn == null)
+        {
+            Transform objTrans = this.panelObj.transform;
+            loginBtn = objTrans.Find("LoginBtn").GetComponent<Button>();
+            forgotPWBtn = objTrans.Find("ForgotPWBtn").GetComponent<Button>();
+            createNewBtn = objTrans.Find("CreateNewBtn").GetComponent<Button>();
+            userNameIF = objTrans.Find("FieldUsername/InputField").GetComponent<InputField>();
+            pwIF = objTrans.Find("FieldPassword/InputField").GetComponent<InputField>();
+
+            loginBtn.onClick.AddListener(OnLoginBtn);
+            forgotPWBtn.onClick.AddListener(OnForgotPWBtn);
+            createNewBtn.onClick.AddListener(OnCreateNewBtn);
+        }
     }
 
     public override void OnShowed()

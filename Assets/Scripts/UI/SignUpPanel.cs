@@ -43,17 +43,22 @@ public class SignUpPanel : BasePanel
     {
         base.OnShowing();
 
-        //get UI Controller
-        Transform objTrans = panelObj.transform;
-        signUpBtn = objTrans.Find("SignupBtn").GetComponent<Button>();
-        alreadyRegisBtn = objTrans.Find("AlreadyRegisBtn").GetComponent<Button>();
-        userNameIF = objTrans.Find("FieldUsername/InputField").GetComponent<InputField>();
-        emailIF = objTrans.Find("FieldEmail/InputField").GetComponent<InputField>();
-        pwIF = objTrans.Find("FieldPassword/InputField").GetComponent<InputField>();
+        ///双重验证 ui控件未初始化 这里只初始化一次 如果频繁Find会使GC暴涨 主要是之前的
+        ///赋值操作的变量会被GC回收
+        if (signUpBtn == null && alreadyRegisBtn == null)
+        {
+            //get UI Controller
+            Transform objTrans = panelObj.transform;
+            signUpBtn = objTrans.Find("SignupBtn").GetComponent<Button>();
+            alreadyRegisBtn = objTrans.Find("AlreadyRegisBtn").GetComponent<Button>();
+            userNameIF = objTrans.Find("FieldUsername/InputField").GetComponent<InputField>();
+            emailIF = objTrans.Find("FieldEmail/InputField").GetComponent<InputField>();
+            pwIF = objTrans.Find("FieldPassword/InputField").GetComponent<InputField>();
 
-        //add click event
-        signUpBtn.onClick.AddListener(OnSignUpBtn);
-        alreadyRegisBtn.onClick.AddListener(OnAlreadyRegisBtn);
+            //add click event
+            signUpBtn.onClick.AddListener(OnSignUpBtn);
+            alreadyRegisBtn.onClick.AddListener(OnAlreadyRegisBtn);
+        }
     }
 
 
