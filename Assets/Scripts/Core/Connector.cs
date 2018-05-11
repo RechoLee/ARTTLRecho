@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEngine.UI;
 
 /// <summary>
 /// 处理网络连接
@@ -16,6 +17,8 @@ public class Connector
     public Socket connSocket;
 
     public Conn _conn;
+
+    public string testText="";
 
     /// <summary>
     /// socket连接
@@ -124,6 +127,7 @@ public class Connector
                     SendCb,
                     conn
                     );
+
             }
         }
         catch (Exception e)
@@ -204,6 +208,8 @@ public class Connector
             string str = Encoding.UTF8.GetString(conn.readBuff, sizeof(Int32), conn.msgLength);
 
             Debug.Log(str);
+            ///Test
+            this.testText += $"{str}\n";
 
             //清除已经处理的消息
             int length = conn.buffCount - conn.msgLength - sizeof(Int32);
