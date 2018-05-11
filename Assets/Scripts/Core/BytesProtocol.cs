@@ -38,12 +38,23 @@ public class BytesProtocol : BaseProtocol
     }
 
     /// <summary>
-    /// 编码
+    /// 编码 封装成一个首部加长度的消息体
     /// </summary>
     /// <returns>返回自身的bytes</returns>
     public override byte[] Encode()
     {
-        return this.bytes;
+        try
+        {
+            byte[] msgLengthBytes = BitConverter.GetBytes(this.bytes.Length);
+            byte[] msgBytes = msgLengthBytes.Concat(this.bytes).ToArray();
+            byte[] allLength = BitConverter.GetBytes(msgBytes.Length);
+            return allLength.Concat(msgBytes).ToArray();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"encode failed :{e.Message}");
+            return null;
+        }
     }
 
     /// <summary>
@@ -171,7 +182,7 @@ public class BytesProtocol : BaseProtocol
 
             Int32 strLength = BitConverter.ToInt32(this.bytes, start);
             //不够一条完整消息长度
-            if (this.bytes.Length < start + strLength)
+            if (this.bytes.Length < start + sizeof(Int32) + strLength)
             {
                 return null;
             }
@@ -214,7 +225,9 @@ public class BytesProtocol : BaseProtocol
         {
             if (this.bytes == null)
                 return null;
-            if (this.bytes.Length < start + sizeof(Int32))
+            //if (this.bytes.Length < start + sizeof(Int32))
+            //    return null;
+            if (this.bytes.Length < start + sizeof(Int32) + sizeof(int))
                 return null;
             end = start + sizeof(Int32) + sizeof(int);
             return BitConverter.ToInt32(this.bytes, start + sizeof(Int32));
@@ -244,7 +257,11 @@ public class BytesProtocol : BaseProtocol
         {
             return null;
         }
-        if (this.bytes.Length < start + sizeof(Int32))
+        //if(this.bytes.Length<start+sizeof(Int32))
+        //{
+        //    return null;
+        //}
+        if (this.bytes.Length < start + sizeof(Int32) + sizeof(float))
         {
             return null;
         }

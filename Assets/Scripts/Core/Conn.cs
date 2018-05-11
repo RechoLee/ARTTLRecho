@@ -166,8 +166,13 @@ public class Conn
         isUse = false;
     }
 
-    //public void Send(ProtocolBase protocol)
+    ///// <summary>
+    ///// 发送协议
+    ///// </summary>
+    ///// <param name="protocol"></param>
+    //public void Send(BaseProtocol protocol)
     //{
     //    //TODO:
+    //    ServNet.instance.Send(this, protocol);
     //}
 }
