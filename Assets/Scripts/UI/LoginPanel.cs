@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Login面板类
+/// </summary>
 public class LoginPanel :BasePanel
 {
     /// <summary>
@@ -95,9 +98,59 @@ public class LoginPanel :BasePanel
         //TODO:点击忘记密码按钮，找回密码
     }
 
+    /// <summary>
+    /// 登录按钮
+    /// </summary>
     private void OnLoginBtn()
     {
         //TODO:验证登录信息
+        //客户端检验
+        if(userNameIF.text==""||pwIF.text=="")
+        {
+            //TODO:
+            Debug.Log("用户名密码不能为空");
+            return;
+        }
+
+        if(NetMgr.connector.status!=Status.Connected)
+        {
+            if(!NetMgr.connector.Connect())
+            {
+                //TODO:
+                Debug.Log("网络连接失败");
+                return;
+            }
+        }
+
+        //发送Login协议
+        BytesProtocol proto = new BytesProtocol();
+        proto.AddString("Login");
+        proto.AddString(userNameIF.text);
+        proto.AddString(pwIF.text);
+
+        NetMgr.connector.Send(proto, OnLoginBack);
+    }
+
+    /// <summary>
+    /// 登录协议的回调函数 根据返回的协议判断登录是否成功
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnLoginBack(BaseProtocol obj)
+    {
+        BytesProtocol proto = obj as BytesProtocol;
+        int start=0;
+        string protoName = proto.GetString(start, ref start);
+        int status = proto.GetInt(start,ref start).Value;
+        if(status==1)
+        {
+            Debug.Log("登录成功");
+            //TODO:切换到用户信息界面
+        }
+        else
+        {
+            Debug.Log("登录失败");
+            //TODO:反馈信息 重新登录
+        }
     }
 
     #endregion

@@ -209,6 +209,10 @@ public class Connector
             {
                 return;
             }
+            if(count==sendBuffCount)
+            {
+                return;
+            }
             int remain =sendBuffCount - count;
             //清除已经发送的数据
             Array.Copy(
@@ -269,6 +273,7 @@ public class Connector
         }
         catch (Exception e)
         {
+            //TODO:异常关闭情况
             Debug.Log($"ReceiveCb异常:{e.Message}");
             status = Status.None;
         }
