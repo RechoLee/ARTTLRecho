@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEngine.UI;
+using System.Reflection;
 
 /// <summary>
 /// 处理网络连接
@@ -28,7 +29,20 @@ public class Connector
     /// <summary>
     /// 单例
     /// </summary>
-    public static Connector instance=null; 
+    public static Connector instance=null;
+
+    /// <summary>
+    /// Conn消息处理类
+    /// </summary>
+    public HandleConnMsg handleConnMsg;
+    /// <summary>
+    /// User消息处理类
+    /// </summary>
+    public HandleUserMsg handleUserMsg;
+    /// <summary>
+    /// User event处理类
+    /// </summary>
+    public HandleUserEvent handleUserEvent;
 
     public Connector()
     {
@@ -37,6 +51,11 @@ public class Connector
 
         //协议
         protocol = new BytesProtocol();
+
+        //初始化消息事件处理类
+        handleUserEvent = new HandleUserEvent();
+        handleUserMsg = new HandleUserMsg();
+        handleConnMsg = new HandleConnMsg();
     }
 
 
@@ -226,15 +245,47 @@ public class Connector
     }
 
     /// <summary>
-    /// 处理消息
+    /// 处理消息 反射实现
     /// </summary>
     public void HandleMsg(Conn conn,BaseProtocol _protocol)
     {
-        int start=0;
-        BytesProtocol proto = _protocol as BytesProtocol;
-        string protoName = proto.GetString(start,ref start);
-        int protoArgs = proto.GetInt(start,ref start).Value;
+        //int start=0;
+        //BytesProtocol proto = _protocol as BytesProtocol;
+        //string protoName = proto.GetString(start,ref start);
+        //int protoArgs = proto.GetInt(start,ref start).Value;
 
-        this.testText = protoName + protoArgs.ToString();
+        //this.testText = protoName + protoArgs.ToString();
+
+        string name = _protocol.GetName();
+        string methodName = "Msg" + name;
+
+        //连接协议分发
+        if((conn.user==null)||(name=="HeartBeat")||(name=="Logout"))
+        {
+            MethodInfo mi=handleConnMsg.GetType().GetMethod(methodName);
+
+            if (mi == null)
+            {
+                //没有处理方法
+                return;
+            }
+
+            object[] objs = new object[] {conn,_protocol };
+            mi.Invoke(handleConnMsg,objs);
+        }
+        ///交给user handle处理
+        else
+        {
+            //
+            MethodInfo mi = handleUserMsg.GetType().GetMethod(methodName);
+            if(mi==null)
+            {
+                return;
+            }
+
+            object[] objs = new object[] {conn,_protocol };
+            mi.Invoke(handleUserMsg,objs);
+        }
+
     }
 }
