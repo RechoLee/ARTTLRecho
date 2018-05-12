@@ -21,6 +21,26 @@ public class Connector
     public string testText="";
 
     /// <summary>
+    /// 协议
+    /// </summary>
+    BaseProtocol protocol;
+
+    /// <summary>
+    /// 单例
+    /// </summary>
+    public static Connector instance=null; 
+
+    public Connector()
+    {
+        if (instance == null)
+            instance = this;
+
+        //协议
+        protocol = new BytesProtocol();
+    }
+
+
+    /// <summary>
     /// socket连接
     /// </summary>
     public void Connect()
@@ -40,32 +60,6 @@ public class Connector
             ReceiveCb,
             _conn
             );
-    }
-
-    /// <summary>
-    /// 封装了给客户端发送消息的方法，可以确保消息全部被发出
-    /// </summary>
-    /// <param name="conn"></param>
-    /// <param name="str"></param>
-    public void Send(Conn conn, string str)
-    {
-        try
-        {
-            //调用setSendBuff
-            conn.SetSendBuff(Encoding.UTF8.GetBytes(str));
-
-            conn.socket.BeginSend(
-                conn.sendBuff,
-                0,
-                conn.sendBuffCount,
-                SocketFlags.None,
-                SendCb,
-                conn);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Send方法中异常：{e.Message}");
-        }
     }
 
     /// <summary>
@@ -118,15 +112,18 @@ public class Connector
 
                 conn.sendBuffCount = remain;
 
-                //递归发送
-                conn.socket.BeginSend(
-                    conn.readBuff,
-                    0,
-                    conn.sendBuffCount,
-                    SocketFlags.None,
-                    SendCb,
-                    conn
-                    );
+                if (conn.sendBuffCount > 0)
+                {
+                    //递归发送
+                    conn.socket.BeginSend(
+                        conn.readBuff,
+                        0,
+                        conn.sendBuffCount,
+                        SocketFlags.None,
+                        SendCb,
+                        conn
+                        );
+                }
 
             }
         }
@@ -152,8 +149,6 @@ public class Connector
 
                 if (count <= 0)
                 {
-                    Debug.Log("close");
-                    //conn.Close();
                     return;
                 }
                 else
@@ -188,7 +183,6 @@ public class Connector
         ///小于长度字节 不是一个长度的字节长度
         if (conn.buffCount < sizeof(Int32))
         {
-            Debug.Log("消息过短");
             return;
         }
 
@@ -199,39 +193,48 @@ public class Connector
             conn.msgLength = BitConverter.ToInt32(conn.lenBytes, 0);
 
             //判断是否够一条消息的长度
-            if (conn.buffCount < conn.msgLength + sizeof(Int32))
+            if (conn.buffCount < conn.msgLength)
             {
                 return;
             }
 
-            //处理消息
-            string str = Encoding.UTF8.GetString(conn.readBuff, sizeof(Int32), conn.msgLength);
-
-            Debug.Log(str);
-            ///Test
-            this.testText += $"{str}\n";
+            ////使用协议解析 重点理解这里
+            ///    消息体形式：(bytes消息长度|长度 协议|长度 参数1|长度 参数2)
+            //TODO:
+            BaseProtocol proto = protocol.Decode(conn.readBuff, sizeof(Int32), conn.msgLength - sizeof(Int32));
+            HandleMsg(conn, proto);
 
             //清除已经处理的消息
-            int length = conn.buffCount - conn.msgLength - sizeof(Int32);
+            int length = conn.buffCount - conn.msgLength;
             Array.Copy(
                 conn.readBuff,
-                conn.msgLength + sizeof(Int32),
+                conn.msgLength,
                 conn.readBuff,
                 0,
                 length);
-
             conn.buffCount = length;
-        }
-        catch (Exception)
-        {
-            Debug.LogError("数组异常");
-        }
-        finally
-        {
+
             if (conn.buffCount > 0)
             {
                 ReceiveProcessData(conn);
             }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine($"异常 {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 处理消息
+    /// </summary>
+    public void HandleMsg(Conn conn,BaseProtocol _protocol)
+    {
+        int start=0;
+        BytesProtocol proto = _protocol as BytesProtocol;
+        string protoName = proto.GetString(start,ref start);
+        int protoArgs = proto.GetInt(start,ref start).Value;
+
+        this.testText = protoName + protoArgs.ToString();
     }
 }

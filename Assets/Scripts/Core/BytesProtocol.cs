@@ -45,10 +45,14 @@ public class BytesProtocol : BaseProtocol
     {
         try
         {
-            byte[] msgLengthBytes = BitConverter.GetBytes(this.bytes.Length);
-            byte[] msgBytes = msgLengthBytes.Concat(this.bytes).ToArray();
-            byte[] allLength = BitConverter.GetBytes(msgBytes.Length);
-            return allLength.Concat(msgBytes).ToArray();
+            //byte[] msgLengthBytes = BitConverter.GetBytes(this.bytes.Length);
+            //byte[] msgBytes = msgLengthBytes.Concat(this.bytes).ToArray();
+            //byte[] allLength = BitConverter.GetBytes(msgBytes.Length);
+            //return allLength.Concat(msgBytes).ToArray();
+
+            byte[] allLenBytes = BitConverter.GetBytes(this.bytes.Length+sizeof(int));
+            return allLenBytes.Concat(this.bytes).ToArray();
+
         }
         catch (Exception e)
         {

@@ -19,15 +19,22 @@ public class Test : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        connetor.Connect();
 
+        connetor.Connect();
 	}
 	
     public void OnClickSend()
     {
         string msg=input.text;
 
-        connetor.Send(connetor._conn,msg);
+        BytesProtocol proto = new BytesProtocol();
+
+        proto.AddString("Register");
+        proto.AddString("lijinrun");
+        proto.AddString("123456");
+        proto.AddString("12154545@qq.com");
+
+        connetor.Send(connetor._conn, proto);
     }
 
     // Update is called once per frame
