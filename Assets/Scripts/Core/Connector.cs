@@ -10,96 +10,190 @@ using UnityEngine.UI;
 using System.Reflection;
 
 /// <summary>
+/// 连接状态
+/// </summary>
+public enum Status
+{
+    None,
+    Connected,
+    Disconnected
+}
+
+/// <summary>
 /// 处理网络连接
 /// </summary>
 public class Connector
 {
+    //连接socket
+    private Socket connSocket;
+    //buff大小
+    private const int BUFFER_SIZE = 1024;
+    private byte[] readBuff = new byte[BUFFER_SIZE];
+    //buff count
+    private int readBuffCount = 0;
+    //粘包分包
+    private Int32 msgLength = 0;
+    private byte[] lenBytes = new byte[sizeof(Int32)];
 
-    public Socket connSocket;
-
-    public Conn _conn;
-
-    public string testText="";
+    //send 相关参数
+    private byte[] sendBuff = new byte[BUFFER_SIZE];
+    private int sendBuffCount = 0;
+    private Int32 sendMsgLength = 0;
+    private byte[] sendLenBytes = new byte[sizeof(Int32)];
 
     /// <summary>
     /// 协议
     /// </summary>
-    BaseProtocol protocol;
+    public BaseProtocol protocol;
+
+    //心跳时间
+    public float lastTickTime = 0;
+    public float heartBeatTime=2;
 
     /// <summary>
-    /// 单例
+    /// 消息分发
     /// </summary>
-    public static Connector instance=null;
+    public MsgDistribution msgDistribution = new MsgDistribution();
 
     /// <summary>
-    /// Conn消息处理类
+    /// 连接状态
     /// </summary>
-    public HandleConnMsg handleConnMsg;
-    /// <summary>
-    /// User消息处理类
-    /// </summary>
-    public HandleUserMsg handleUserMsg;
-    /// <summary>
-    /// User event处理类
-    /// </summary>
-    public HandleUserEvent handleUserEvent;
+    public Status status = Status.None;
 
     public Connector()
     {
-        if (instance == null)
-            instance = this;
-
         //协议
         protocol = new BytesProtocol();
-
-        //初始化消息事件处理类
-        handleUserEvent = new HandleUserEvent();
-        handleUserMsg = new HandleUserMsg();
-        handleConnMsg = new HandleConnMsg();
     }
 
+    /// <summary>
+    /// 更新函数
+    /// </summary>
+    public void Update()
+    {
+        //消息
+        msgDistribution.Update();
+        //心跳
+        //定时发送一个心跳包
+        if(status==Status.Connected)
+        {
+            if(Time.time>heartBeatTime+lastTickTime)
+            {
+                BaseProtocol proto = NetMgr.GetHeartBeatProtocol();
+                Send(proto);
+                lastTickTime = Time.time;
+            }
+        }
+
+    }
 
     /// <summary>
     /// socket连接
     /// </summary>
-    public void Connect()
+    public bool Connect()
     {
-        connSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        _conn = new Conn();
-        _conn.Init(connSocket);
+        try
+        {
+            connSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"),1995);
-        connSocket.Connect(iPEndPoint);
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1995);
+            connSocket.Connect(iPEndPoint);
 
-        connSocket.BeginReceive(
-            _conn.readBuff,
-            _conn.buffCount,
-            _conn.BuffRemain(),
-            SocketFlags.None,
-            ReceiveCb,
-            _conn
-            );
+            connSocket.BeginReceive(
+                readBuff,
+                readBuffCount,
+                BUFFER_SIZE-readBuffCount,
+                SocketFlags.None,
+                ReceiveCb,
+                readBuff
+                );
+
+            status = Status.Connected;
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"连接失败："+e.Message);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 关闭连接
+    /// </summary>
+    /// <returns></returns>
+    public bool Close()
+    {
+        try
+        {
+            connSocket.Close();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"关闭失败：{e.Message}");
+            return false;
+        }
     }
 
     /// <summary>
     /// 发送协议
     /// </summary>
-    /// <param name="conn"></param>
     /// <param name="protocol"></param>
-    public void Send(Conn conn, BaseProtocol _protocol)
+    public bool Send(BaseProtocol _protocol)
     {
-        //已经是编码后的协议
-        conn.sendBuff = _protocol.Encode();
-        conn.sendBuffCount = conn.sendBuff.Length;
+        if(status!=Status.Connected)
+        {
+            Debug.Log("请先联网");
+            return false;
+        }
 
-        conn.socket.BeginSend(
-            conn.sendBuff,
+        //已经是编码后的协议
+        sendBuff = _protocol.Encode();
+        sendBuffCount =sendBuff.Length;
+
+        connSocket.BeginSend(
+            sendBuff,
             0,
-            conn.sendBuffCount,
+            sendBuffCount,
             SocketFlags.None,
             SendCb,
-            conn
+            sendBuff
             );
+        return true;
+    }
+
+    /// <summary>
+    /// 发送协议并设置回调函数
+    /// </summary>
+    /// <param name="_protocol">协议名</param>
+    /// <param name="nameCb">Once Action name</param>
+    /// <param name="">Once Action</param>
+    /// <returns></returns>
+    public bool Send(BaseProtocol  _protocol,string nameCb,Action<BaseProtocol> action)
+    {
+        if(status!=Status.Connected)
+        {
+            return false;
+        }
+        msgDistribution.AddOnceListener(nameCb,action);
+        return Send(_protocol);
+    }
+
+    /// <summary>
+    /// 发送协议
+    /// </summary>
+    /// <param name="_protocol"></param>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public bool Send(BaseProtocol _protocol,Action<BaseProtocol> action)
+    {
+        string cbName = _protocol.GetName();
+        if(string.IsNullOrEmpty(cbName))
+        {
+            return false;
+        }
+        return Send(_protocol,cbName, action);
     }
 
     /// <summary>
@@ -110,45 +204,39 @@ public class Connector
     {
         try
         {
-            Conn conn = ar.AsyncState as Conn;
-
-            if (conn != null)
+            int count = connSocket.EndSend(ar);
+            if (count <= 0)
             {
-                int count = conn.socket.EndSend(ar);
-                if (count <= 0)
-                {
-                    return;
-                }
-                int remain = conn.sendBuffCount - count;
-                //清除已经发送的数据
-                Array.Copy(
-                    conn.sendBuff,
-                    count,
-                    conn.sendBuff,
+                return;
+            }
+            int remain =sendBuffCount - count;
+            //清除已经发送的数据
+            Array.Copy(
+                sendBuff,
+                count,
+                sendBuff,
+                0,
+                remain
+                );
+
+            sendBuffCount = remain;
+
+            if (sendBuffCount > 0)
+            {
+                //递归发送
+                connSocket.BeginSend(
+                    sendBuff,
                     0,
-                    remain
+                    sendBuffCount,
+                    SocketFlags.None,
+                    SendCb,
+                    sendBuff
                     );
-
-                conn.sendBuffCount = remain;
-
-                if (conn.sendBuffCount > 0)
-                {
-                    //递归发送
-                    conn.socket.BeginSend(
-                        conn.readBuff,
-                        0,
-                        conn.sendBuffCount,
-                        SocketFlags.None,
-                        SendCb,
-                        conn
-                        );
-                }
-
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"SendCb异常：{e.Message}");
+            Debug.Log($"SendCb异常：{e.Message}");
         }
     }
 
@@ -160,36 +248,29 @@ public class Connector
     {
         try
         {
-            Conn conn = ar.AsyncState as Conn;
-            if (conn != null)
+            int count = connSocket.EndReceive(ar);
+            if (count <= 0)
             {
-                
-                int count = conn.socket.EndReceive(ar);
-
-                if (count <= 0)
-                {
-                    return;
-                }
-                else
-                {
-                    conn.buffCount += count;
-                    //TODO:
-                    ReceiveProcessData(conn);
-
-                    //继续接收
-                    conn.socket.BeginReceive(
-                        conn.readBuff,
-                        conn.buffCount,
-                        conn.BuffRemain(),
-                        SocketFlags.None,
-                        ReceiveCb,
-                        conn);
-                }
+                return;
+            }
+            else
+            {
+                readBuffCount += count;
+                ReceiveProcessData();
+                //继续接收
+                connSocket.BeginReceive(
+                    readBuff,
+                    readBuffCount,
+                    BUFFER_SIZE-readBuffCount,
+                    SocketFlags.None,
+                    ReceiveCb,
+                    readBuff);
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"socket 接收异常：{e.Message}");
+            Debug.Log($"ReceiveCb异常:{e.Message}");
+            status = Status.None;
         }
     }
 
@@ -197,95 +278,51 @@ public class Connector
     /// 处理buff数据 分包
     /// </summary>
     /// <param name="conn">conn 连接</param>
-    private void ReceiveProcessData(Conn conn)
+    private void ReceiveProcessData()
     {
         ///小于长度字节 不是一个长度的字节长度
-        if (conn.buffCount < sizeof(Int32))
+        if (readBuffCount < sizeof(Int32))
         {
             return;
         }
-
         try
         {
             //获取消息的长度
-            Array.Copy(conn.readBuff, conn.lenBytes, sizeof(Int32));
-            conn.msgLength = BitConverter.ToInt32(conn.lenBytes, 0);
+            Array.Copy(readBuff,lenBytes,sizeof(Int32));
+            msgLength = BitConverter.ToInt32(lenBytes, 0);
 
             //判断是否够一条消息的长度
-            if (conn.buffCount < conn.msgLength)
+            if (readBuffCount < msgLength)
             {
                 return;
             }
-
             ////使用协议解析 重点理解这里
             ///    消息体形式：(bytes消息长度|长度 协议|长度 参数1|长度 参数2)
             //TODO:
-            BaseProtocol proto = protocol.Decode(conn.readBuff, sizeof(Int32), conn.msgLength - sizeof(Int32));
-            HandleMsg(conn, proto);
+            BaseProtocol proto = protocol.Decode(readBuff, sizeof(Int32),msgLength - sizeof(Int32));
+            lock (msgDistribution)
+            {
+                msgDistribution.msgList.Add(proto);
+            }
 
             //清除已经处理的消息
-            int length = conn.buffCount - conn.msgLength;
+            int length = readBuffCount - msgLength;
             Array.Copy(
-                conn.readBuff,
-                conn.msgLength,
-                conn.readBuff,
+                readBuff,
+                msgLength,
+                readBuff,
                 0,
                 length);
-            conn.buffCount = length;
+            readBuffCount = length;
 
-            if (conn.buffCount > 0)
+            if (readBuffCount > 0)
             {
-                ReceiveProcessData(conn);
+                ReceiveProcessData();
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine($"异常 {e.Message}");
+            Console.WriteLine($"{e.Message}");
         }
-    }
-
-    /// <summary>
-    /// 处理消息 反射实现
-    /// </summary>
-    public void HandleMsg(Conn conn,BaseProtocol _protocol)
-    {
-        //int start=0;
-        //BytesProtocol proto = _protocol as BytesProtocol;
-        //string protoName = proto.GetString(start,ref start);
-        //int protoArgs = proto.GetInt(start,ref start).Value;
-
-        //this.testText = protoName + protoArgs.ToString();
-
-        string name = _protocol.GetName();
-        string methodName = "Msg" + name;
-
-        //连接协议分发
-        if((conn.user==null)||(name=="HeartBeat")||(name=="Logout"))
-        {
-            MethodInfo mi=handleConnMsg.GetType().GetMethod(methodName);
-
-            if (mi == null)
-            {
-                //没有处理方法
-                return;
-            }
-
-            object[] objs = new object[] {conn,_protocol };
-            mi.Invoke(handleConnMsg,objs);
-        }
-        ///交给user handle处理
-        else
-        {
-            //
-            MethodInfo mi = handleUserMsg.GetType().GetMethod(methodName);
-            if(mi==null)
-            {
-                return;
-            }
-
-            object[] objs = new object[] {conn,_protocol };
-            mi.Invoke(handleUserMsg,objs);
-        }
-
     }
 }

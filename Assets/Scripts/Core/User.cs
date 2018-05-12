@@ -10,12 +10,10 @@ public class User
     /// <summary>
     /// 用户连接对象
     /// </summary>
-    public Conn conn;
 
-    public User(UserData data, Conn _conn)
+    public User(UserData data)
     {
         this.userData = data;
-        this.conn = _conn;
     }
 
     /// <summary>
@@ -24,8 +22,6 @@ public class User
     /// <param name="proto"></param>
     public void Send(BaseProtocol proto)
     {
-        if (conn == null)
-            return;
-        Connector.instance.Send(conn, proto);
+
     }
 }
