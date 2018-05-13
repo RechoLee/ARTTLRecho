@@ -48,7 +48,7 @@ public class Connector
 
     //心跳时间
     public float lastTickTime = 0;
-    public float heartBeatTime=2;
+    public float heartBeatTime=3;
 
     /// <summary>
     /// 消息分发
@@ -113,6 +113,7 @@ public class Connector
         }
         catch (Exception e)
         {
+            //TODO:
             Debug.Log($"连接失败："+e.Message);
             return false;
         }
@@ -152,15 +153,22 @@ public class Connector
         sendBuff = _protocol.Encode();
         sendBuffCount =sendBuff.Length;
 
-        connSocket.BeginSend(
-            sendBuff,
-            0,
-            sendBuffCount,
-            SocketFlags.None,
-            SendCb,
-            sendBuff
-            );
-        return true;
+        try
+        {
+            connSocket.BeginSend(
+                sendBuff,
+                0,
+                sendBuffCount,
+                SocketFlags.None,
+                SendCb,
+                _protocol
+                );
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -205,37 +213,23 @@ public class Connector
         try
         {
             int count = connSocket.EndSend(ar);
-            if (count <= 0)
+            if(count!=sendBuffCount)
             {
+                //重新发送
+                BaseProtocol proto = ar.AsyncState as BaseProtocol;
+                if(!Send(proto))
+                {
+                    //TODO:
+                    Debug.Log("重发失败,请检查网络连接");
+                }
                 return;
             }
-            if(count==sendBuffCount)
+            else
             {
+                Debug.Log("数据发送完了");
+                sendBuffCount -= count;
+                sendBuff = new byte[] { };
                 return;
-            }
-            int remain =sendBuffCount - count;
-            //清除已经发送的数据
-            Array.Copy(
-                sendBuff,
-                count,
-                sendBuff,
-                0,
-                remain
-                );
-
-            sendBuffCount = remain;
-
-            if (sendBuffCount > 0)
-            {
-                //递归发送
-                connSocket.BeginSend(
-                    sendBuff,
-                    0,
-                    sendBuffCount,
-                    SocketFlags.None,
-                    SendCb,
-                    sendBuff
-                    );
             }
         }
         catch (Exception e)

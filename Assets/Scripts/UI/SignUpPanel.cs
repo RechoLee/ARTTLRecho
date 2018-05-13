@@ -61,8 +61,6 @@ public class SignUpPanel : BasePanel
         }
     }
 
-
-
     #endregion
 
     #region 自定义的UI event处理事件
@@ -73,10 +71,58 @@ public class SignUpPanel : BasePanel
         PanelMgr.instance.OpenPanel<LoginPanel>("");
     }
 
+    /// <summary>
+    /// 注册按钮事件
+    /// </summary>
     private void OnSignUpBtn()
     {
         //TODO:
         Debug.Log("click OnSignUpBtn");
+
+        if(userNameIF.text==""||pwIF.text==""||emailIF.text=="")
+        {
+            Debug.Log("请填完注册信息");
+            return;
+        }
+        if(NetMgr.connector.status!=Status.Connected)
+        {
+            NetMgr.connector.Connect();
+        }
+        BytesProtocol proto = new BytesProtocol();
+        proto.AddString("Register");
+        proto.AddString(userNameIF.text);
+        proto.AddString(pwIF.text);
+        proto.AddString(emailIF.text);
+        Debug.Log($"发送：{proto.GetName()}协议");
+        if(!NetMgr.connector.Send(proto,OnRegisterEvent))
+        {
+            //TODO:
+            Debug.Log("注册失败");
+        }
+    }
+
+    /// <summary>
+    /// 注册协议的回调
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnRegisterEvent(BaseProtocol obj)
+    {
+        BytesProtocol proto = obj as BytesProtocol;
+        if(proto!=null)
+        {
+            int start = 0;
+            string protoName = proto.GetString(start,ref start);
+            int status = proto.GetInt(start,ref start).Value;
+            if(status==1)
+            {
+                Debug.Log("注册成功");
+                //TODO:打开别的面板
+            }
+            else
+            {
+                Debug.Log("注册失败");
+            }
+        }
     }
 
     #endregion
