@@ -201,7 +201,8 @@ public class Connector
         {
             return false;
         }
-        return Send(_protocol,cbName, action);
+        return Send
+            (_protocol,cbName, action);
     }
 
     /// <summary>

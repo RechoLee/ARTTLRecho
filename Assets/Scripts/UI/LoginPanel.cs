@@ -144,11 +144,13 @@ public class LoginPanel :BasePanel
         if(status==1)
         {
             Debug.Log("登录成功");
+            NetMgr.connector.status = Status.Connected;
             //TODO:切换到用户信息界面
         }
         else
         {
             Debug.Log("登录失败");
+            NetMgr.connector.status = Status.None;
             //TODO:反馈信息 重新登录
         }
     }
