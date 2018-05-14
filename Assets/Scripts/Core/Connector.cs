@@ -163,6 +163,9 @@ public class Connector
                 SendCb,
                 _protocol
                 );
+
+            Debug.Log("zzzzzz");
+
             return true;
         }
         catch (Exception)
@@ -201,8 +204,7 @@ public class Connector
         {
             return false;
         }
-        return Send
-            (_protocol,cbName, action);
+        return Send(_protocol,cbName, action);
     }
 
     /// <summary>
