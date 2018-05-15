@@ -44,11 +44,7 @@ public class PanelMgr : MonoBehaviour
 
     private void Start()
     {
-        //打开默认的首页界面
-        OpenPanel<IndexPanel>("IndexPanel");
 
-        //不消毁
-        DontDestroyOnLoad(this.gameObject);
     }
 
     #endregion
