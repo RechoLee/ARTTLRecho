@@ -21,6 +21,8 @@ public class PanelMgr : MonoBehaviour
     /// </summary>
     private Dictionary<string, BasePanel> panelDict;
 
+    private Dictionary<string, BasePanel> tipDict;
+
     /// <summary>
     /// 层级的root物体字典
     /// </summary>
@@ -33,6 +35,7 @@ public class PanelMgr : MonoBehaviour
         //单例
         instance = this;
         panelDict = new Dictionary<string, BasePanel>();
+        tipDict = new Dictionary<string, BasePanel>();
         layerDict = new Dictionary<PanelLayer, Transform>();
         Init();
     }
@@ -119,6 +122,49 @@ public class PanelMgr : MonoBehaviour
     }
 
     /// <summary>
+    /// 打开Tip面板
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="path"></param>
+    /// <param name="_args"></param>
+    public void OpenTip<T>(string path,params object[] _args)
+        where T:BasePanel
+    {
+        string tipName = typeof(T).ToString();
+        if(tipDict.ContainsKey(tipName))
+        {
+            return;
+        }
+
+        BasePanel panel = canvas.GetComponent<T>();
+        if(panel==null)
+        {
+            //添加面板脚本
+            panel = canvas.AddComponent<T>();
+            panel.Init(_args);
+
+            //从预制体中加载面板资源
+            path = string.IsNullOrEmpty(path) ? panel.panelPath : path;
+            GameObject panelObj = Resources.Load<GameObject>(path);
+            if (panelObj == null)
+            {
+                Debug.LogError("panelObj is null");
+                return;
+            }
+            panel.panelObj = Instantiate(panelObj, layerDict[panel.layer]);
+        }
+        else
+        {
+            panel.enabled = true;
+            panel.panelObj.SetActive(true);
+        }
+
+        panel.OnShowing();
+        panel.OnShowed();
+        tipDict.Add(tipName,panel);
+    }
+
+    /// <summary>
     /// 关闭面板操作
     /// </summary>
     /// <param name="panelName">面板名称</param>
@@ -138,6 +184,24 @@ public class PanelMgr : MonoBehaviour
     }
 
     /// <summary>
+    /// 关闭tip
+    /// </summary>
+    /// <param name="tipName"></param>
+    public void CloseTip(string tipName)
+    {
+        BasePanel tip = tipDict[tipName];
+        if (tip == null)
+            return;
+
+        tip.OnClosing();
+        tip.OnClosed();
+
+        tipDict.Remove(tipName);
+        tip.panelObj.SetActive(false);
+        tip.enabled = false;
+    }
+
+    /// <summary>
     /// Destroy this panel
     /// </summary>
     /// <param name="panelName"></param>
@@ -151,6 +215,22 @@ public class PanelMgr : MonoBehaviour
         panelDict.Remove(panelName);
         GameObject.Destroy(panel.panelObj);
         Component.Destroy(panel);
+    }
+
+    /// <summary>
+    /// Destroy this tip
+    /// </summary>
+    /// <param name="panelName"></param>
+    public void DestroyTip(string tipName)
+    {
+        BasePanel tip = tipDict[tipName];
+        if (tip == null)
+            return;
+        tip.OnClosing();
+        tip.OnClosed();
+        panelDict.Remove(tipName);
+        GameObject.Destroy(tip.panelObj);
+        Component.Destroy(tip);
     }
 
     #endregion

@@ -79,7 +79,11 @@ public class SignUpPanel : BasePanel
         //TODO:
         Debug.Log("click OnSignUpBtn");
 
-        if(userNameIF.text==""||pwIF.text==""||emailIF.text=="")
+        //test
+        PanelMgr.instance.OpenTip<ErrorTip>("", "注册失败");
+        //test
+
+        if (userNameIF.text==""||pwIF.text==""||emailIF.text=="")
         {
             Debug.Log("请填完注册信息");
             return;
