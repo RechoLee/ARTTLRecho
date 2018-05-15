@@ -151,6 +151,7 @@ public class LoginPanel :BasePanel
         {
             Debug.Log("登录失败");
             NetMgr.connector.status = Status.None;
+            NetMgr.connector.Close();
             //TODO:反馈信息 重新登录
         }
     }

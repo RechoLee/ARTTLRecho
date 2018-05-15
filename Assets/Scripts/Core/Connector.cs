@@ -48,7 +48,7 @@ public class Connector
 
     //心跳时间
     public float lastTickTime = 0;
-    public float heartBeatTime=3;
+    public float heartBeatTime=2;
 
     /// <summary>
     /// 消息分发
@@ -155,14 +155,15 @@ public class Connector
 
         try
         {
-            connSocket.BeginSend(
-                sendBuff,
-                0,
-                sendBuffCount,
-                SocketFlags.None,
-                SendCb,
-                _protocol
-                );
+            //connSocket.BeginSend(
+            //    sendBuff,
+            //    0,
+            //    sendBuffCount,
+            //    SocketFlags.None,
+            //    SendCb,
+            //    _protocol
+            //    );
+            connSocket.Send(sendBuff);
 
             Debug.Log("zzzzzz");
 
@@ -173,6 +174,8 @@ public class Connector
             return false;
         }
     }
+
+
 
     /// <summary>
     /// 发送协议并设置回调函数
