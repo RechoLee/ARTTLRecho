@@ -8,7 +8,7 @@ public class PanelMgr : MonoBehaviour
     /// <summary>
     /// PanelMgr的单例
     /// </summary>
-    public static PanelMgr instance;
+    public static PanelMgr instance=null;
     public BasePanel currOpenedPanel;
 
     /// <summary>
@@ -33,7 +33,9 @@ public class PanelMgr : MonoBehaviour
     private void Awake()
     {
         //单例
-        instance = this;
+        if(instance==null)
+            instance = this;
+
         panelDict = new Dictionary<string, BasePanel>();
         tipDict = new Dictionary<string, BasePanel>();
         layerDict = new Dictionary<PanelLayer, Transform>();
@@ -44,6 +46,9 @@ public class PanelMgr : MonoBehaviour
     {
         //打开默认的首页界面
         OpenPanel<IndexPanel>("IndexPanel");
+
+        //不消毁
+        DontDestroyOnLoad(this.gameObject);
     }
 
     #endregion

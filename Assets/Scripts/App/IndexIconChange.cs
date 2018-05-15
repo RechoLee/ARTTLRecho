@@ -105,12 +105,7 @@ public class IndexIconChange : MonoBehaviour
             isSelected[i] = false;
         }
         //TODO:打开AR场景
-        if (PanelMgr.instance.currOpenedPanel != null)
-        {
-            PanelMgr.instance.ClosePanel(PanelMgr.instance.currOpenedPanel.GetType().Name);
-            PanelMgr.instance.currOpenedPanel = null;
-        }
-
+        PanelMgr.instance.OpenPanel<ARPanel>("");
 
         currText.text = titles[1];
         isSelected[1] = true;
