@@ -103,6 +103,10 @@ public class LoginPanel :BasePanel
     /// </summary>
     private void OnLoginBtn()
     {
+        //test
+        PanelMgr.instance.OpenPanel<UserPanel>("");
+        //test
+
         //TODO:验证登录信息
         //客户端检验
         if(userNameIF.text==""||pwIF.text=="")
@@ -129,6 +133,7 @@ public class LoginPanel :BasePanel
         proto.AddString(pwIF.text);
 
         NetMgr.connector.Send(proto, OnLoginBack);
+
     }
 
     /// <summary>
