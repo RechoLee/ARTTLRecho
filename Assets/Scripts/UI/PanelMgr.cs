@@ -242,6 +242,7 @@ public class PanelMgr : MonoBehaviour
 public enum PanelLayer
 {
     Panel,
+    Show,
     Tip
 }
 
