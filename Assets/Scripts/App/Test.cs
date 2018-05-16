@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using LitJson;
+using LeanCloud.Storage.Internal;
+using LeanCloud.Core.Internal;
+using LeanCloud;
 
 public class Test : MonoBehaviour {
 
@@ -38,6 +42,12 @@ public class Test : MonoBehaviour {
         proto.AddString("lijinrun");
         proto.AddString("123456");
 
+    }
+
+    public void Test1()
+    {
+        string json = "";
+        JsonData data = new JsonData();
     }
 
     // Update is called once per frame
