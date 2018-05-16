@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeanCloud;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class UserPanel:BasePanel
 
     private Button aboutBtn;
     private Button logoutBtn;
+
+    private Text nameText;
 
     #region 面板生命周期
 
@@ -28,18 +31,33 @@ public class UserPanel:BasePanel
             Transform objTrans = this.panelObj.transform;
             aboutBtn = objTrans.Find("About/BG").GetComponent<Button>();
             logoutBtn = objTrans.Find("Logout/BG").GetComponent<Button>();
+            nameText = objTrans.Find("UserInfo/Text").GetComponent<Text>();
 
             aboutBtn.onClick.AddListener(OnAboutBtn);
             logoutBtn.onClick.AddListener(OnLogoutBtn);
         }
     }
 
+    public override void OnShowed()
+    {
+        base.OnShowed();
+        nameText.text = AVUser.CurrentUser.Username;
+    }
+
 
     #endregion
 
-    private void OnLogoutBtn()
+    private async void OnLogoutBtn()
     {
-        PanelMgr.instance.OpenPanel<LoginPanel>("");
+        try
+        {
+            await AVUser.LogOutAsync();
+            PanelMgr.instance.OpenPanel<LoginPanel>("");
+        }
+        catch (Exception)
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("","退出失败，请检查网络连接");
+        }
     }
 
     private void OnAboutBtn()

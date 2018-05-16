@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeanCloud;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -101,39 +102,65 @@ public class LoginPanel :BasePanel
     /// <summary>
     /// 登录按钮
     /// </summary>
-    private void OnLoginBtn()
+    private async void OnLoginBtn()
     {
-        //test
-        PanelMgr.instance.OpenPanel<UserPanel>("");
-        //test
+        ////test
+        //PanelMgr.instance.OpenPanel<UserPanel>("");
+        ////test
+
+        //if (NetMgr.connector.status != Status.Connected)
+        //{
+        //    if (!NetMgr.connector.Connect())
+        //    {
+        //        TODO:
+        //        Debug.Log("网络连接失败");
+        //        return;
+        //    }
+        //}
+
+        ////发送Login协议
+        //BytesProtocol proto = new BytesProtocol();
+        //proto.AddString("Login");
+        //proto.AddString(userNameIF.text);
+        //proto.AddString(pwIF.text);
+
+        //NetMgr.connector.Send(proto, OnLoginBack);
 
         //TODO:验证登录信息
         //客户端检验
-        if(userNameIF.text==""||pwIF.text=="")
+        if (userNameIF.text == "" || pwIF.text == "")
         {
             //TODO:
-            Debug.Log("用户名密码不能为空");
+            PanelMgr.instance.OpenTip<ErrorTip>("", "用户名密码不能为空");
             return;
         }
 
-        if(NetMgr.connector.status!=Status.Connected)
+        try
         {
-            if(!NetMgr.connector.Connect())
-            {
-                //TODO:
-                Debug.Log("网络连接失败");
-                return;
-            }
+            await AVUser.LogInAsync(userNameIF.text, pwIF.text);
+            OnLoginSucess();
+        }
+        catch (Exception)
+        {
+            OnLoginFail();
         }
 
-        //发送Login协议
-        BytesProtocol proto = new BytesProtocol();
-        proto.AddString("Login");
-        proto.AddString(userNameIF.text);
-        proto.AddString(pwIF.text);
+    }
 
-        NetMgr.connector.Send(proto, OnLoginBack);
+    /// <summary>
+    /// 登录失败
+    /// </summary>
+    private void OnLoginFail()
+    {
+        PanelMgr.instance.OpenTip<ErrorTip>("","登录失败，请确认用户名或者密码");
+    }
 
+    /// <summary>
+    /// 登录成功处理事件
+    /// </summary>
+    private void OnLoginSucess()
+    {
+        PanelMgr.instance.OpenPanel<UserPanel>("");
     }
 
     /// <summary>

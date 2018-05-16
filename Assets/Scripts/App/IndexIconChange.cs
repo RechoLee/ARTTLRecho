@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeanCloud;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -123,8 +124,15 @@ public class IndexIconChange : MonoBehaviour
             isSelected[i] = false;
         }
 
-        //TODO:
-        PanelMgr.instance.OpenPanel<LoginPanel>("");
+        //TODO:判断是否登录 登录直接进入UserPanel
+        if(AVUser.CurrentUser!=null)
+        {
+            PanelMgr.instance.OpenPanel<UserPanel>("");
+        }
+        else
+        {
+            PanelMgr.instance.OpenPanel<LoginPanel>("");
+        }
 
         currText.text = titles[2];
         isSelected[2] = true;

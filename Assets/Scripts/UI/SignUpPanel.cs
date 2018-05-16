@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeanCloud;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -74,35 +75,71 @@ public class SignUpPanel : BasePanel
     /// <summary>
     /// 注册按钮事件
     /// </summary>
-    private void OnSignUpBtn()
+    private async void OnSignUpBtn()
     {
-        //TODO:
-        Debug.Log("click OnSignUpBtn");
+        ////TODO:
+        //Debug.Log("click OnSignUpBtn");
 
-        //test
-        PanelMgr.instance.OpenTip<ErrorTip>("", "注册失败");
-        //test
+        ////test
+        //PanelMgr.instance.OpenTip<ErrorTip>("", "注册失败");
+        ////test
 
-        if (userNameIF.text==""||pwIF.text==""||emailIF.text=="")
+        //if (userNameIF.text==""||pwIF.text==""||emailIF.text=="")
+        //{
+        //    Debug.Log("请填完注册信息");
+        //    return;
+        //}
+        //if(NetMgr.connector.status!=Status.Connected)
+        //{
+        //    NetMgr.connector.Connect();
+        //}
+        //BytesProtocol proto = new BytesProtocol();
+        //proto.AddString("Register");
+        //proto.AddString(userNameIF.text);
+        //proto.AddString(pwIF.text);
+        //proto.AddString(emailIF.text);
+        //Debug.Log($"发送：{proto.GetName()}协议");
+        //if(!NetMgr.connector.Send(proto,OnRegisterEvent))
+        //{
+        //    //TODO:
+        //    Debug.Log("注册失败");
+        //}
+
+        if (userNameIF.text == "" || pwIF.text == "" || emailIF.text == "")
         {
-            Debug.Log("请填完注册信息");
+            PanelMgr.instance.OpenTip<ErrorTip>("", "请填完注册信息");
             return;
         }
-        if(NetMgr.connector.status!=Status.Connected)
+
+        AVUser user = new AVUser();
+        user.Username = userNameIF.text;
+        user.Email = emailIF.text;
+        user.Password = pwIF.text;
+        try
         {
-            NetMgr.connector.Connect();
+            await user.SignUpAsync();
+            OnRegisterSuccess();
         }
-        BytesProtocol proto = new BytesProtocol();
-        proto.AddString("Register");
-        proto.AddString(userNameIF.text);
-        proto.AddString(pwIF.text);
-        proto.AddString(emailIF.text);
-        Debug.Log($"发送：{proto.GetName()}协议");
-        if(!NetMgr.connector.Send(proto,OnRegisterEvent))
+        catch (Exception)
         {
-            //TODO:
-            Debug.Log("注册失败");
+            OnRegisterFail();
         }
+    }
+
+    /// <summary>
+    /// 注册失败
+    /// </summary>
+    private void OnRegisterFail()
+    {
+        PanelMgr.instance.OpenTip<ErrorTip>("","注册失败");
+    }
+
+    /// <summary>
+    /// 注册成功
+    /// </summary>
+    private void OnRegisterSuccess()
+    {
+        PanelMgr.instance.OpenPanel<UserPanel>("");
     }
 
     /// <summary>

@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SceneInit : MonoBehaviour
 {
@@ -11,6 +14,7 @@ public class SceneInit : MonoBehaviour
     private void Awake()
     {
         Screen.orientation = screenOrientation;
+
     }
 
     // Use this for initialization
@@ -33,9 +37,9 @@ public class SceneInit : MonoBehaviour
                 break;
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         
 	}
