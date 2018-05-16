@@ -1,0 +1,52 @@
+ManifestFileVersion: 0
+CRC: 3555637927
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: model1
+      Dependencies: {}
+    Info_1:
+      Name: model16
+      Dependencies: {}
+    Info_2:
+      Name: model15
+      Dependencies: {}
+    Info_3:
+      Name: model14
+      Dependencies: {}
+    Info_4:
+      Name: model13
+      Dependencies: {}
+    Info_5:
+      Name: model12
+      Dependencies: {}
+    Info_6:
+      Name: model11
+      Dependencies: {}
+    Info_7:
+      Name: model10
+      Dependencies: {}
+    Info_8:
+      Name: model9
+      Dependencies: {}
+    Info_9:
+      Name: model8
+      Dependencies: {}
+    Info_10:
+      Name: model7
+      Dependencies: {}
+    Info_11:
+      Name: model6
+      Dependencies: {}
+    Info_12:
+      Name: model5
+      Dependencies: {}
+    Info_13:
+      Name: model4
+      Dependencies: {}
+    Info_14:
+      Name: model3
+      Dependencies: {}
+    Info_15:
+      Name: model2
+      Dependencies: {}
