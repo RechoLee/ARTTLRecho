@@ -419,8 +419,8 @@ MonoBehaviour:
           m_StringArgument: Long tap me
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickLongTap+OnLongTap, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickLongTap+OnLongTap, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   actionTriggering: 2
 --- !u!114 &280869335
 MonoBehaviour:
@@ -458,8 +458,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickLongTap+OnLongTap, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickLongTap+OnLongTap, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   actionTriggering: 1
 --- !u!114 &280869336
 MonoBehaviour:
@@ -497,8 +497,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickLongTap+OnLongTap, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickLongTap+OnLongTap, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   actionTriggering: 0
 --- !u!1 &330215106
 GameObject:
@@ -967,8 +967,8 @@ MonoBehaviour:
   onSwipeAction:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickSwipe+OnSwipeAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickSwipe+OnSwipeAction, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   allowSwipeStartOverMe: 1
   actionTriggering: 0
   swipeDirection: 1
@@ -1098,8 +1098,8 @@ MonoBehaviour:
   onTwistAction:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickTwist+OnTwistAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTwist+OnTwistAction, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   isGestureOnMe: 1
   actionTriggering: 0
   rotationDirection: 0
@@ -1283,7 +1283,6 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 58f581a48e465cd459939ca031bdff32, type: 2}
-  m_RootGameObject: {fileID: 876852594}
   m_IsPrefabParent: 0
 --- !u!1 &846002603
 GameObject:
@@ -1343,8 +1342,8 @@ MonoBehaviour:
   onPinchAction:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickPinch+OnPinchAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickPinch+OnPinchAction, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   isGestureOnMe: 1
   actionTriggering: 0
   pinchDirection: 0
@@ -1572,8 +1571,8 @@ MonoBehaviour:
   onDragStart:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickDrag+OnDragStart, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickDrag+OnDragStart, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onDrag:
     m_PersistentCalls:
       m_Calls:
@@ -1588,8 +1587,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickDrag+OnDrag, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickDrag+OnDrag, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onDragEnd:
     m_PersistentCalls:
       m_Calls:
@@ -1604,69 +1603,9 @@ MonoBehaviour:
           m_StringArgument: Drag me
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickDrag+OnDragEnd, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickDrag+OnDragEnd, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   isStopOncollisionEnter: 0
---- !u!1 &876852594
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 109886, guid: 58f581a48e465cd459939ca031bdff32, type: 2}
-  m_PrefabInternal: {fileID: 833377551}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1711494350}
-  - component: {fileID: 876852596}
-  - component: {fileID: 876852595}
-  m_Layer: 0
-  m_Name: Plane
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!23 &876852595
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2309886, guid: 58f581a48e465cd459939ca031bdff32,
-    type: 2}
-  m_PrefabInternal: {fileID: 833377551}
-  m_GameObject: {fileID: 876852594}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 2100000, guid: c80f451e92b4e5347b6e135834a6b2d8, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &876852596
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 3309886, guid: 58f581a48e465cd459939ca031bdff32,
-    type: 2}
-  m_PrefabInternal: {fileID: 833377551}
-  m_GameObject: {fileID: 876852594}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1020354952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1803,8 +1742,8 @@ MonoBehaviour:
           m_StringArgument: Touch me
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickTouch+OnTouch, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTouch+OnTouch, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onTouchNotOverMe:
     m_PersistentCalls:
       m_Calls:
@@ -1819,8 +1758,8 @@ MonoBehaviour:
           m_StringArgument: Touch me
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickTouch+OnTouchNotOverMe, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTouch+OnTouchNotOverMe, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   actionTriggering: 2
 --- !u!114 &1020354959
 MonoBehaviour:
@@ -1858,13 +1797,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickTouch+OnTouch, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTouch+OnTouch, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onTouchNotOverMe:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickTouch+OnTouchNotOverMe, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTouch+OnTouchNotOverMe, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   actionTriggering: 1
 --- !u!114 &1020354960
 MonoBehaviour:
@@ -1902,14 +1841,130 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickTouch+OnTouch, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTouch+OnTouch, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onTouchNotOverMe:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickTouch+OnTouchNotOverMe, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTouch+OnTouchNotOverMe, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   actionTriggering: 0
+--- !u!1 &1023251084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1023251088}
+  - component: {fileID: 1023251087}
+  - component: {fileID: 1023251086}
+  - component: {fileID: 1023251085}
+  - component: {fileID: 1023251089}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1023251085
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1023251084}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!65 &1023251086
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1023251084}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1023251087
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1023251084}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1023251088
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1023251084}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.3, y: 4.486779, z: 0.16490729}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1023251089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1023251084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df757cf29e57b9449a27cd9dc4a9404a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quickActionName: QuickSwipe4cbac4a
+  isMultiTouch: 0
+  is2Finger: 0
+  isOnTouch: 0
+  enablePickOverUI: 0
+  resetPhysic: 0
+  directAction: 2
+  axesAction: 1
+  sensibility: 1
+  directCharacterController: {fileID: 0}
+  inverseAxisValue: 0
+  onSwipeAction:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HedgehogTeam.EasyTouch.QuickSwipe+OnSwipeAction, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  allowSwipeStartOverMe: 1
+  actionTriggering: 0
+  swipeDirection: 1
+  enableSimpleAction: 1
 --- !u!1 &1067826262
 GameObject:
   m_ObjectHideFlags: 0
@@ -2130,18 +2185,18 @@ MonoBehaviour:
   onDragStart:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickDrag+OnDragStart, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickDrag+OnDragStart, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onDrag:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickDrag+OnDrag, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickDrag+OnDrag, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   onDragEnd:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: QuickDrag+OnDragEnd, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickDrag+OnDragEnd, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   isStopOncollisionEnter: 0
 --- !u!1 &1390518997
 GameObject:
@@ -2242,8 +2297,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickEnterOverExist+OnTouchEnter, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickEnterOverExist+OnTouchEnter, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   onTouchOver:
     m_PersistentCalls:
       m_Calls:
@@ -2258,8 +2313,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickEnterOverExist+OnTouchOver, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickEnterOverExist+OnTouchOver, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   onTouchExit:
     m_PersistentCalls:
       m_Calls:
@@ -2274,8 +2329,8 @@ MonoBehaviour:
           m_StringArgument: Enter Over Exit
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickEnterOverExist+OnTouchExit, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickEnterOverExist+OnTouchExit, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!23 &1443511846
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2568,8 +2623,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickTap+OnTap, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTap+OnTap, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   actionTriggering: 1
 --- !u!1 &1489195350
 GameObject:
@@ -2897,19 +2952,10 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!4 &1711494350
+--- !u!4 &1711494350 stripped
 Transform:
-  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 409886, guid: 58f581a48e465cd459939ca031bdff32, type: 2}
   m_PrefabInternal: {fileID: 833377551}
-  m_GameObject: {fileID: 876852594}
-  m_LocalRotation: {x: -0.001750618, y: 0.7071047, z: -0.7071046, w: 0.0017507368}
-  m_LocalPosition: {x: 0, y: 0, z: 3.4300003}
-  m_LocalScale: {x: 1.856554, y: 0, z: 1.1828299}
-  m_Children: []
-  m_Father: {fileID: 1390518998}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1902932937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3137,8 +3183,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: QuickTap+OnTap, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    m_TypeName: HedgehogTeam.EasyTouch.QuickTap+OnTap, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   actionTriggering: 0
 --- !u!1 &1979730835
 GameObject:
