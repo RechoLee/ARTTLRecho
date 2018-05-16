@@ -16,6 +16,7 @@ public class Test : MonoBehaviour {
 
     public Connector connetor;
 
+
     private void Awake()
     {
         connetor = new Connector();
