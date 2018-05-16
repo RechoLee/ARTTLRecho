@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ar.unity
     guid: cfba3ef746a0b944c93c40897eaca008
+  - enabled: 1
+    path: Assets/Scenes/3d.unity
+    guid: c92881dd2d3bf164583c3042f09b0d03
