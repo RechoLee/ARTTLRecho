@@ -229,7 +229,7 @@ public class PanelMgr : MonoBehaviour
             return;
         tip.OnClosing();
         tip.OnClosed();
-        panelDict.Remove(tipName);
+        tipDict.Remove(tipName);
         GameObject.Destroy(tip.panelObj);
         Component.Destroy(tip);
     }

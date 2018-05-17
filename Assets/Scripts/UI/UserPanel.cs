@@ -10,6 +10,7 @@ public class UserPanel:BasePanel
 
     private Button aboutBtn;
     private Button logoutBtn;
+    private Button reportBugBtn;
 
     private Text nameText;
 
@@ -32,11 +33,14 @@ public class UserPanel:BasePanel
             aboutBtn = objTrans.Find("About/BG").GetComponent<Button>();
             logoutBtn = objTrans.Find("Logout/BG").GetComponent<Button>();
             nameText = objTrans.Find("UserInfo/Text").GetComponent<Text>();
+            reportBugBtn = objTrans.Find("ReportBug/BG").GetComponent<Button>();
 
             aboutBtn.onClick.AddListener(OnAboutBtn);
+            reportBugBtn.onClick.AddListener(OnReportBugBtn);
             logoutBtn.onClick.AddListener(OnLogoutBtn);
         }
     }
+
 
     public override void OnShowed()
     {
@@ -46,6 +50,11 @@ public class UserPanel:BasePanel
 
 
     #endregion
+
+    private void OnReportBugBtn()
+    {
+        PanelMgr.instance.OpenTip<ReportBugTip>("");
+    }
 
     private async void OnLogoutBtn()
     {
