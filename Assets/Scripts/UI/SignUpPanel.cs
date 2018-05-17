@@ -105,6 +105,12 @@ public class SignUpPanel : BasePanel
         //    Debug.Log("注册失败");
         //}
 
+        if (!PanelMgr.instance.NetConnect())
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("", "网络异常，请检查网络连接");
+            return;
+        }
+
         if (userNameIF.text == "" || pwIF.text == "" || emailIF.text == "")
         {
             PanelMgr.instance.OpenTip<ErrorTip>("", "请填完注册信息");
@@ -118,7 +124,14 @@ public class SignUpPanel : BasePanel
         try
         {
             await user.SignUpAsync();
-            OnRegisterSuccess();
+            if (AVUser.CurrentUser != null)
+            {
+                OnRegisterSuccess();
+            }
+            else
+            {
+                OnRegisterFail();
+            }
         }
         catch (Exception)
         {
@@ -131,7 +144,7 @@ public class SignUpPanel : BasePanel
     /// </summary>
     private void OnRegisterFail()
     {
-        PanelMgr.instance.OpenTip<ErrorTip>("","注册失败");
+        PanelMgr.instance.OpenTip<ErrorTip>("","注册失败，用户名邮箱已被注册过");
     }
 
     /// <summary>

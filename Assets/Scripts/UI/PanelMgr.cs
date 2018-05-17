@@ -115,6 +115,7 @@ public class PanelMgr : MonoBehaviour
         }
 
         //调用生命周期函数
+        basePanel.Init(args);
         basePanel.OnShowing();
         basePanel.OnShowed();
 
@@ -160,6 +161,7 @@ public class PanelMgr : MonoBehaviour
             panel.panelObj.SetActive(true);
         }
 
+        panel.Init(_args);
         panel.OnShowing();
         panel.OnShowed();
         tipDict.Add(tipName,panel);
@@ -232,6 +234,18 @@ public class PanelMgr : MonoBehaviour
         tipDict.Remove(tipName);
         GameObject.Destroy(tip.panelObj);
         Component.Destroy(tip);
+    }
+
+    /// <summary>
+    /// 检测网络是否连接
+    /// </summary>
+    public bool NetConnect()
+    {
+        if(Application.internetReachability==NetworkReachability.NotReachable)
+        {
+            return false;
+        }
+        return true;
     }
 
     #endregion

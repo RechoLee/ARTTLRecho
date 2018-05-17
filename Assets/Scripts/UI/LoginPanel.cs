@@ -94,9 +94,12 @@ public class LoginPanel :BasePanel
         PanelMgr.instance.OpenPanel<SignUpPanel>("");
     }
 
+    /// <summary>
+    /// 找回密码
+    /// </summary>
     private void OnForgotPWBtn()
     {
-        //TODO:点击忘记密码按钮，找回密码
+        PanelMgr.instance.OpenTip<ForgotPWTip>("");
     }
 
     /// <summary>
@@ -126,25 +129,36 @@ public class LoginPanel :BasePanel
 
         //NetMgr.connector.Send(proto, OnLoginBack);
 
+        if(!PanelMgr.instance.NetConnect())
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("","网络异常，请检查网络连接");
+            return;
+        }
+
         //TODO:验证登录信息
         //客户端检验
         if (userNameIF.text == "" || pwIF.text == "")
         {
-            //TODO:
             PanelMgr.instance.OpenTip<ErrorTip>("", "用户名密码不能为空");
             return;
         }
 
         try
         {
-            await AVUser.LogInAsync(userNameIF.text, pwIF.text);
-            OnLoginSucess();
+            var result= await AVUser.LogInAsync(userNameIF.text, pwIF.text);
+            if (result != null)
+            {
+                OnLoginSucess();
+            }
+            else
+            {
+                OnLoginFail();
+            }
         }
         catch (Exception)
         {
             OnLoginFail();
         }
-
     }
 
     /// <summary>
@@ -152,7 +166,7 @@ public class LoginPanel :BasePanel
     /// </summary>
     private void OnLoginFail()
     {
-        PanelMgr.instance.OpenTip<ErrorTip>("","登录失败，请确认用户名或者密码");
+        PanelMgr.instance.OpenTip<ErrorTip>("","登录失败，请确认用户名密码");
     }
 
     /// <summary>

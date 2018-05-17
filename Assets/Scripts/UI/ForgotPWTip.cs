@@ -5,18 +5,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ReportBugTip :BasePanel
+/// <summary>
+/// 忘记密码找回
+/// </summary>
+public class ForgotPWTip:BasePanel
 {
+
+    private InputField emailInput;
     private Button closeBtn;
     private Button okBtn;
     private Text errorText;
-    private InputField userInput;
-
 
     public override void Init(params object[] _args)
     {
         base.Init(_args);
-        this.panelPath = "ReportBugTip";
+        this.panelPath = "ForgotPWTip";
         this.layer = PanelLayer.Tip;
     }
 
@@ -29,13 +32,12 @@ public class ReportBugTip :BasePanel
             Transform trans = this.panelObj.transform;
             closeBtn = trans.Find("Content/CloseBtn").GetComponent<Button>();
             okBtn = trans.Find("Content/OkBtn").GetComponent<Button>();
+            emailInput = trans.Find("Content/EmailInput").GetComponent<InputField>();
             errorText = trans.Find("Content/ErrorText").GetComponent<Text>();
-            userInput = trans.Find("Content/UserInput").GetComponent<InputField>();
 
+            errorText.text = "";
             okBtn.onClick.AddListener(OnOkBtn);
             closeBtn.onClick.AddListener(OnCloseBtn);
-            errorText.text = "";
-
         }
 
     }
@@ -49,39 +51,21 @@ public class ReportBugTip :BasePanel
     {
         if (!PanelMgr.instance.NetConnect())
         {
-            errorText.text = "网络连接错误，请检查网络连接";
-            StartCoroutine(ShowThenClear());
+            PanelMgr.instance.OpenTip<ErrorTip>("", "网络异常，请检查网络连接");
             return;
         }
-
-        if (AVUser.CurrentUser==null)
-        {
-            errorText.text = "请先登录，方便我们采集错误信息";
-            StartCoroutine(ShowThenClear());
-            return;
-        }
-        AVObject obj = new AVObject("ReportBug");
-        obj["reportUser"] =AVUser.CurrentUser.Username;
-        if(userInput.text=="")
-        {
-            errorText.text = "请填写Bug信息";
-            StartCoroutine(ShowThenClear());
-            return;
-        }
-        obj["bugInfo"] = userInput.text;
 
         try
         {
-            await obj.SaveAsync();
-            errorText.text = "反馈成功,感谢你的反馈";
+            await AVUser.RequestPasswordResetAsync(emailInput.text);
+            errorText.text="邮件已发送，请查收";
             StartCoroutine(ShowAndClose());
         }
         catch (Exception)
         {
-            errorText.text = "网络连接错误，请检查网络连接";
+            errorText.text = "邮件发送失败";
             StartCoroutine(ShowThenClear());
-            return;
-        }
+        } 
     }
 
     IEnumerator ShowThenClear()

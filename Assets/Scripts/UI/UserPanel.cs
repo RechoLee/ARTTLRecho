@@ -58,6 +58,12 @@ public class UserPanel:BasePanel
 
     private async void OnLogoutBtn()
     {
+        if (!PanelMgr.instance.NetConnect())
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("", "网络异常，请检查网络连接");
+            return;
+        }
+
         try
         {
             await AVUser.LogOutAsync();
@@ -65,7 +71,7 @@ public class UserPanel:BasePanel
         }
         catch (Exception)
         {
-            PanelMgr.instance.OpenTip<ErrorTip>("","退出失败，请检查网络连接");
+            PanelMgr.instance.OpenTip<ErrorTip>("","退出失败");
         }
     }
 
