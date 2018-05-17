@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using LitJson;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// IndexPanel面板的操作方法，生命周期
@@ -22,6 +23,7 @@ public class IndexPanel : BasePanel
     private Text bottomText;
     private Text topText;
     private Image loadingImg;
+    private MyEvent myEvent;
 
     private GameObject itemObj;
 
@@ -177,8 +179,8 @@ public class IndexPanel : BasePanel
         Transform trans=GameObject.Instantiate(itemObj,content).transform;
 
         trans.Find("Name").GetComponent<Text>().text=data.Name;
-        Button btn= trans.Find("OpenBtn").GetComponent<Button>();
-        btn.onClick.AddListener(OnOpenBtn);
+        MyEvent btn= trans.Find("OpenBtn").GetComponent<MyEvent>();
+        btn.DoAction+=OnOpenBtn;
         Image img = trans.Find("Image").GetComponent<Image>();
 
         WWW www = new WWW(data.ImgUrl);
@@ -190,8 +192,24 @@ public class IndexPanel : BasePanel
         img.sprite= Sprite.Create(texture2d, new Rect(0, 0, texture2d.width, texture2d.height), new Vector2(0.5f, 0.5f));
     }
 
-    private void OnOpenBtn()
+
+    /// <summary>
+    /// 点击了OpenBtn
+    /// </summary>
+    private void OnOpenBtn(GameObject obj)
     {
+        Transform parent = obj.transform.parent;
+        Text name= parent.Find("Name").GetComponent<Text>();
+        for (int i = 0; i < modelDatas.Count; i++)
+        {
+            if(modelDatas[i].Name==name.text)
+            {
+                PlayerPrefs.SetString("AbUrl",modelDatas[i].AbUrl);
+                AsyncOperation operation = SceneManager.LoadSceneAsync("3d");
+                PanelMgr.instance.OpenPanel<LoadingPanel>("",operation);
+                return;
+            }
+        }
 
     }
 
