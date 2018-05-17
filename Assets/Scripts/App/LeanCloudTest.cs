@@ -123,9 +123,3 @@ public class ItemData
     public string Obj { get; set; }
     public string Video { get; set; }
 }
-
-public class ModelData
-{
-    public string Name { get; set; }
-    public string AbUrl { get; set; }
-}

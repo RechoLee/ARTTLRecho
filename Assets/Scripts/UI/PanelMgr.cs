@@ -47,6 +47,14 @@ public class PanelMgr : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if(currOpenedPanel!=null)
+        {
+            currOpenedPanel.Update();
+        }
+    }
+
     #endregion
 
     #region 操作方法
