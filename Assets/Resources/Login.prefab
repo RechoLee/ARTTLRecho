@@ -477,7 +477,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Password
+  m_Text: password
 --- !u!114 &114188404584039054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -551,7 +551,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Username
+  m_Text: username
 --- !u!114 &114252318851719368
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -704,7 +704,7 @@ MonoBehaviour:
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.18
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -718,13 +718,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114252318851719368}
   m_TextComponent: {fileID: 114384360974016670}
   m_Placeholder: {fileID: 114219525857835616}
-  m_ContentType: 5
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 6
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_CharacterLimit: 20
   m_OnEndEdit:
     m_PersistentCalls:

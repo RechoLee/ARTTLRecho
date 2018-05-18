@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeanCloud;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,8 +62,6 @@ public class SignUpPanel : BasePanel
         }
     }
 
-
-
     #endregion
 
     #region 自定义的UI event处理事件
@@ -73,10 +72,111 @@ public class SignUpPanel : BasePanel
         PanelMgr.instance.OpenPanel<LoginPanel>("");
     }
 
-    private void OnSignUpBtn()
+    /// <summary>
+    /// 注册按钮事件
+    /// </summary>
+    private async void OnSignUpBtn()
     {
-        //TODO:
-        Debug.Log("click OnSignUpBtn");
+        ////TODO:
+        //Debug.Log("click OnSignUpBtn");
+
+        ////test
+        //PanelMgr.instance.OpenTip<ErrorTip>("", "注册失败");
+        ////test
+
+        //if (userNameIF.text==""||pwIF.text==""||emailIF.text=="")
+        //{
+        //    Debug.Log("请填完注册信息");
+        //    return;
+        //}
+        //if(NetMgr.connector.status!=Status.Connected)
+        //{
+        //    NetMgr.connector.Connect();
+        //}
+        //BytesProtocol proto = new BytesProtocol();
+        //proto.AddString("Register");
+        //proto.AddString(userNameIF.text);
+        //proto.AddString(pwIF.text);
+        //proto.AddString(emailIF.text);
+        //Debug.Log($"发送：{proto.GetName()}协议");
+        //if(!NetMgr.connector.Send(proto,OnRegisterEvent))
+        //{
+        //    //TODO:
+        //    Debug.Log("注册失败");
+        //}
+
+        if (!PanelMgr.instance.NetConnect())
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("", "网络异常，请检查网络连接");
+            return;
+        }
+
+        if (userNameIF.text == "" || pwIF.text == "" || emailIF.text == "")
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("", "请填完注册信息");
+            return;
+        }
+
+        AVUser user = new AVUser();
+        user.Username = userNameIF.text;
+        user.Email = emailIF.text;
+        user.Password = pwIF.text;
+        try
+        {
+            await user.SignUpAsync();
+            if (AVUser.CurrentUser != null)
+            {
+                OnRegisterSuccess();
+            }
+            else
+            {
+                OnRegisterFail();
+            }
+        }
+        catch (Exception)
+        {
+            OnRegisterFail();
+        }
+    }
+
+    /// <summary>
+    /// 注册失败
+    /// </summary>
+    private void OnRegisterFail()
+    {
+        PanelMgr.instance.OpenTip<ErrorTip>("","注册失败，用户名邮箱已被注册过");
+    }
+
+    /// <summary>
+    /// 注册成功
+    /// </summary>
+    private void OnRegisterSuccess()
+    {
+        PanelMgr.instance.OpenPanel<UserPanel>("");
+    }
+
+    /// <summary>
+    /// 注册协议的回调
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnRegisterEvent(BaseProtocol obj)
+    {
+        BytesProtocol proto = obj as BytesProtocol;
+        if(proto!=null)
+        {
+            int start = 0;
+            string protoName = proto.GetString(start,ref start);
+            int status = proto.GetInt(start,ref start).Value;
+            if(status==1)
+            {
+                Debug.Log("注册成功");
+                //TODO:打开别的面板
+            }
+            else
+            {
+                Debug.Log("注册失败");
+            }
+        }
     }
 
     #endregion

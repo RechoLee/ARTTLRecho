@@ -8,7 +8,7 @@ public class PanelMgr : MonoBehaviour
     /// <summary>
     /// PanelMgr的单例
     /// </summary>
-    public static PanelMgr instance;
+    public static PanelMgr instance=null;
     public BasePanel currOpenedPanel;
 
     /// <summary>
@@ -21,6 +21,8 @@ public class PanelMgr : MonoBehaviour
     /// </summary>
     private Dictionary<string, BasePanel> panelDict;
 
+    private Dictionary<string, BasePanel> tipDict;
+
     /// <summary>
     /// 层级的root物体字典
     /// </summary>
@@ -31,16 +33,26 @@ public class PanelMgr : MonoBehaviour
     private void Awake()
     {
         //单例
-        instance = this;
+        if(instance==null)
+            instance = this;
+
         panelDict = new Dictionary<string, BasePanel>();
+        tipDict = new Dictionary<string, BasePanel>();
         layerDict = new Dictionary<PanelLayer, Transform>();
         Init();
     }
 
     private void Start()
     {
-        //打开默认的首页界面
-        OpenPanel<IndexPanel>("IndexPanel");
+
+    }
+
+    private void Update()
+    {
+        if(currOpenedPanel!=null)
+        {
+            currOpenedPanel.Update();
+        }
     }
 
     #endregion
@@ -111,11 +123,56 @@ public class PanelMgr : MonoBehaviour
         }
 
         //调用生命周期函数
+        basePanel.Init(args);
         basePanel.OnShowing();
         basePanel.OnShowed();
 
         currOpenedPanel = basePanel;
         panelDict.Add(panelName, basePanel);
+    }
+
+    /// <summary>
+    /// 打开Tip面板
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="path"></param>
+    /// <param name="_args"></param>
+    public void OpenTip<T>(string path,params object[] _args)
+        where T:BasePanel
+    {
+        string tipName = typeof(T).ToString();
+        if(tipDict.ContainsKey(tipName))
+        {
+            return;
+        }
+
+        BasePanel panel = canvas.GetComponent<T>();
+        if(panel==null)
+        {
+            //添加面板脚本
+            panel = canvas.AddComponent<T>();
+            panel.Init(_args);
+
+            //从预制体中加载面板资源
+            path = string.IsNullOrEmpty(path) ? panel.panelPath : path;
+            GameObject panelObj = Resources.Load<GameObject>(path);
+            if (panelObj == null)
+            {
+                Debug.LogError("panelObj is null");
+                return;
+            }
+            panel.panelObj = Instantiate(panelObj, layerDict[panel.layer]);
+        }
+        else
+        {
+            panel.enabled = true;
+            panel.panelObj.SetActive(true);
+        }
+
+        panel.Init(_args);
+        panel.OnShowing();
+        panel.OnShowed();
+        tipDict.Add(tipName,panel);
     }
 
     /// <summary>
@@ -138,6 +195,24 @@ public class PanelMgr : MonoBehaviour
     }
 
     /// <summary>
+    /// 关闭tip
+    /// </summary>
+    /// <param name="tipName"></param>
+    public void CloseTip(string tipName)
+    {
+        BasePanel tip = tipDict[tipName];
+        if (tip == null)
+            return;
+
+        tip.OnClosing();
+        tip.OnClosed();
+
+        tipDict.Remove(tipName);
+        tip.panelObj.SetActive(false);
+        tip.enabled = false;
+    }
+
+    /// <summary>
     /// Destroy this panel
     /// </summary>
     /// <param name="panelName"></param>
@@ -153,6 +228,34 @@ public class PanelMgr : MonoBehaviour
         Component.Destroy(panel);
     }
 
+    /// <summary>
+    /// Destroy this tip
+    /// </summary>
+    /// <param name="panelName"></param>
+    public void DestroyTip(string tipName)
+    {
+        BasePanel tip = tipDict[tipName];
+        if (tip == null)
+            return;
+        tip.OnClosing();
+        tip.OnClosed();
+        tipDict.Remove(tipName);
+        GameObject.Destroy(tip.panelObj);
+        Component.Destroy(tip);
+    }
+
+    /// <summary>
+    /// 检测网络是否连接
+    /// </summary>
+    public bool NetConnect()
+    {
+        if(Application.internetReachability==NetworkReachability.NotReachable)
+        {
+            return false;
+        }
+        return true;
+    }
+
     #endregion
 }
 /// <summary>
@@ -161,6 +264,7 @@ public class PanelMgr : MonoBehaviour
 public enum PanelLayer
 {
     Panel,
+    Show,
     Tip
 }
 

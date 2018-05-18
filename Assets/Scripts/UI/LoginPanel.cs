@@ -1,9 +1,13 @@
-﻿using System;
+﻿using LeanCloud;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Login面板类
+/// </summary>
 public class LoginPanel :BasePanel
 {
     /// <summary>
@@ -90,14 +94,112 @@ public class LoginPanel :BasePanel
         PanelMgr.instance.OpenPanel<SignUpPanel>("");
     }
 
+    /// <summary>
+    /// 找回密码
+    /// </summary>
     private void OnForgotPWBtn()
     {
-        //TODO:点击忘记密码按钮，找回密码
+        PanelMgr.instance.OpenTip<ForgotPWTip>("");
     }
 
-    private void OnLoginBtn()
+    /// <summary>
+    /// 登录按钮
+    /// </summary>
+    private async void OnLoginBtn()
     {
+        ////test
+        //PanelMgr.instance.OpenPanel<UserPanel>("");
+        ////test
+
+        //if (NetMgr.connector.status != Status.Connected)
+        //{
+        //    if (!NetMgr.connector.Connect())
+        //    {
+        //        TODO:
+        //        Debug.Log("网络连接失败");
+        //        return;
+        //    }
+        //}
+
+        ////发送Login协议
+        //BytesProtocol proto = new BytesProtocol();
+        //proto.AddString("Login");
+        //proto.AddString(userNameIF.text);
+        //proto.AddString(pwIF.text);
+
+        //NetMgr.connector.Send(proto, OnLoginBack);
+
+        if(!PanelMgr.instance.NetConnect())
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("","网络异常，请检查网络连接");
+            return;
+        }
+
         //TODO:验证登录信息
+        //客户端检验
+        if (userNameIF.text == "" || pwIF.text == "")
+        {
+            PanelMgr.instance.OpenTip<ErrorTip>("", "用户名密码不能为空");
+            return;
+        }
+
+        try
+        {
+            var result= await AVUser.LogInAsync(userNameIF.text, pwIF.text);
+            if (result != null)
+            {
+                OnLoginSucess();
+            }
+            else
+            {
+                OnLoginFail();
+            }
+        }
+        catch (Exception)
+        {
+            OnLoginFail();
+        }
+    }
+
+    /// <summary>
+    /// 登录失败
+    /// </summary>
+    private void OnLoginFail()
+    {
+        PanelMgr.instance.OpenTip<ErrorTip>("","登录失败，请确认用户名密码");
+    }
+
+    /// <summary>
+    /// 登录成功处理事件
+    /// </summary>
+    private void OnLoginSucess()
+    {
+        PanelMgr.instance.OpenPanel<UserPanel>("");
+    }
+
+    /// <summary>
+    /// 登录协议的回调函数 根据返回的协议判断登录是否成功
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnLoginBack(BaseProtocol obj)
+    {
+        BytesProtocol proto = obj as BytesProtocol;
+        int start=0;
+        string protoName = proto.GetString(start, ref start);
+        int status = proto.GetInt(start,ref start).Value;
+        if(status==1)
+        {
+            Debug.Log("登录成功");
+            NetMgr.connector.status = Status.Connected;
+            //TODO:切换到用户信息界面
+        }
+        else
+        {
+            Debug.Log("登录失败");
+            NetMgr.connector.status = Status.None;
+            NetMgr.connector.Close();
+            //TODO:反馈信息 重新登录
+        }
     }
 
     #endregion
