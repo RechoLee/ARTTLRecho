@@ -95,24 +95,30 @@ public class IndexPanel : BasePanel
     /// </summary>
     public async void UpdateResources()
     {
+        string jsonStr = "";
+
         if(!PanelMgr.instance.NetConnect())
         {
-            PanelMgr.instance.OpenTip<ErrorTip>("","网络异常，请检查网络连接");
+            PanelMgr.instance.OpenTip<ErrorTip>("","网络异常，请联网获取资源");
             return;
         }
 
-        if(AVUser.CurrentUser==null)
-        {
-            PanelMgr.instance.OpenTip<ErrorTip>("","请登录获取更多资源");
-            return;
-        }
-
-        AVUser user = AVUser.CurrentUser;
-        AVObject obj = AVObject.CreateWithoutData("ObjModel", "5afbf116a22b9d004494b891");
         try
-        {
-            await obj.FetchAsync();
-            string jsonStr=obj.Get<string>("modelInfo");
+        { 
+            if(AVUser.CurrentUser==null)
+            {
+                TextAsset text = Resources.Load("indexDefault") as TextAsset;
+                if (text != null)
+                    jsonStr = text.text;
+                PanelMgr.instance.OpenTip<ErrorTip>("","请登录获取更多资源");
+            }
+            else
+            {
+                AVUser user = AVUser.CurrentUser;
+                AVObject obj = AVObject.CreateWithoutData("ObjModel", "5afbf116a22b9d004494b891");
+                await obj.FetchAsync();
+                jsonStr = obj.Get<string>("modelInfo");
+            }
             List<ModelData> models = JsonMapper.ToObject<List<ModelData>>(jsonStr);
 
             if(isFirst)
@@ -137,7 +143,6 @@ public class IndexPanel : BasePanel
             }
             else
             {
-
                 Debug.Log(1);
                 var result = models.Except<ModelData>(modelDatas, new ModelDataCompare()).ToArray();
                 if (result.Length > 0)
@@ -205,6 +210,8 @@ public class IndexPanel : BasePanel
             if(modelDatas[i].Name==name.text)
             {
                 PlayerPrefs.SetString("AbUrl",modelDatas[i].AbUrl);
+                PlayerPrefs.SetString("ModelName",modelDatas[i].Name);
+                PlayerPrefs.SetString("ImgUrl",modelDatas[i].ImgUrl);
                 AsyncOperation operation = SceneManager.LoadSceneAsync("3d");
                 PanelMgr.instance.OpenPanel<LoadingPanel>("",operation);
                 return;
